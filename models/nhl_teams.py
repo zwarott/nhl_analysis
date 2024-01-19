@@ -1,0 +1,77 @@
+# List of all team names (sorted ascending).
+team_names = [
+    'Anaheim Ducks',
+    'Arizona Coyotes', 
+    'Boston Bruins',
+    'Buffalo Sabres',
+    'Calgary Flames',
+    'Carolina Hurricanes',
+    'Chicago Blackhawks',
+    'Colorado Avalanche',
+    'Columbus Blue Jackets',
+    'Dallas Stars',
+    'Detroit Red Wings',
+    'Edmonton Oilers',
+    'Florida Panthers',
+    'Los Angeles Kings',
+    'Minnesota Wild',
+    'Montreal Canadiens', 
+    'Nashville Predators',
+    'New Jersey Devils',
+    'New York Islanders',
+    'New York Rangers',
+    'Ottawa Senators',
+    'Philadelphia Flyers',
+    'Pittsburgh Penguins',
+    'San Jose Sharks', 
+    'Seattle Kraken', 
+    'St. Louis Blues',
+    'Tampa Bay Lightning',
+    'Toronto Maple Leafs',
+    'Vancouver Canucks',
+    'Vegas Golden Knights',
+    'Washington Capitals',
+    'Winnipeg Jets'
+]
+
+# List of all team abbreviations (sorted by team names).
+team_abbreviations = [
+    "ANA",
+    "ARI",
+    "BOS",
+    "BUF",
+    "CGY",
+    "CAR",
+    "CHI",
+    "COL",
+    "CBJ",
+    "DAL",
+    "DET",
+    "EDM",
+    "FLA",
+    "LAK",
+    "MIN",
+    "MTL",
+    "NSH",
+    "NJD",
+    "NYI",
+    "NYR",
+    "OTT",
+    "PHI",
+    "PIT",
+    "SJS",
+    "SEA",
+    "STL",
+    "TBL",
+    "TOR",
+    "VAN",
+    "VEG",
+    "WSH",
+    "WPG",
+]
+
+# Create dictionaty -> team abbreviation: team name.
+teams_dict = dict(zip(team_names, team_abbreviations))
+
+
+
