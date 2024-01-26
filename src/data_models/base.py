@@ -24,7 +24,8 @@ timestamp_created = Annotated[
 ]
 timestamp_updated = Annotated[
     datetime.datetime, 
-    mapped_column(onupdate=func.CURRENT_TIMESTAMP(0))
+    mapped_column(onupdate=func.CURRENT_TIMESTAMP(0),
+                  nullable=True)
     
 ]
 
