@@ -1,17 +1,19 @@
 from __future__ import annotations
-from typing import List
+from typing import List, TYPE_CHECKING
 
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, relationship
 
-from base import Base
-from base import intpk, intfk_tid, str_2, date  
-from base import timestamp_created, timestamp_updated
-from base import game_team_join, game_player_join
+from src.data_models.base import Base
+from src.data_models.base import intpk, intfk_tid, str_2, date  
+from src.data_models.base import timestamp_created, timestamp_updated
+from src.data_models.base import game_team_join, game_player_join
 
-from team import Team
 
-from player import Player 
+# Use TYPE_CHECKING constant to prevent the circular imports
+if TYPE_CHECKING:
+    from src.data_models.team import Team
+    from src.data_models.player import Player 
 
 
 class Game(Base):
@@ -46,12 +48,9 @@ class Game(Base):
     end: Mapped[str_2] 
     
     # Many-to-Many relationships between Game and Team, Player class objects
-    teams: Mapped[List[Team]] = relationship(secondary=game_team_join, back_populates="game")
-    players: Mapped[List[Player]] = relationship(secondary=game_player_join, back_populates="game")
+    teams: Mapped[List[Team]] = relationship(secondary=game_team_join, back_populates="games")
+    players: Mapped[List[Player]] = relationship(secondary=game_player_join, back_populates="games")
     
-    # Record information 
+    # Record info 
     created: Mapped[timestamp_created]
     updated: Mapped[timestamp_updated]
-    
-
-

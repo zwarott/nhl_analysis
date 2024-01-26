@@ -2,7 +2,7 @@ import datetime
 
 from typing_extensions import Annotated
 
-from sqlalchemy import MetaData, String, ForeignKey, Table, Column
+from sqlalchemy import MetaData, String, ForeignKey, Table, Column, func 
 from sqlalchemy.orm import DeclarativeBase, mapped_column
 
 
@@ -20,11 +20,11 @@ str_3 = Annotated[str, mapped_column(String(3), nullable=False)]
 date = Annotated[datetime.date, mapped_column(datetime.date.today().isoformat())] 
 timestamp_created = Annotated[
     datetime.datetime, 
-    mapped_column(server_default=datetime.datetime.today().isoformat(sep=' ', timespec='seconds'))
+    mapped_column(server_default=func.CURRENT_TIMESTAMP(0))
 ]
 timestamp_updated = Annotated[
     datetime.datetime, 
-    mapped_column(onupdate=datetime.datetime.today().isoformat(sep=' ', timespec='seconds'))
+    mapped_column(onupdate=func.CURRENT_TIMESTAMP(0))
     
 ]
 
@@ -50,20 +50,20 @@ class Base(DeclarativeBase):
     # Set up metadata within the declarative base.
     metadata = metadata_obj
 
+
 # Association tables
 # Game-Team Many-to-Many relationship
 game_team_join = Table(
     "game_team_join",
     Base.metadata,
-    Column("gid", ForeignKey("game.gid"), primary_key=True),
-    Column("tid", ForeignKey("team.tid"), primary_key=True)
-) 
+    Column("game_gid", ForeignKey("game.gid"), primary_key=True, index=True),
+    Column("team_tid", ForeignKey("team.tid"), primary_key=True, index=True)
+)
 
 # Game-Player Many-to-Many relationship
 game_player_join = Table(
     "game_player_join",
     Base.metadata,
-    Column("gid", ForeignKey("game.gid"), primary_key=True),
-    Column("pid", ForeignKey("player.pid"), primary_key=True)
+    Column("game_gid", ForeignKey("game.gid"), primary_key=True, index=True),
+    Column("player_pid", ForeignKey("player.pid"), primary_key=True, index=True)
 )
-

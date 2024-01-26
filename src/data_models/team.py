@@ -1,16 +1,18 @@
 from __future__ import annotations
-from typing import List
+from typing import List, TYPE_CHECKING
 
 from sqlalchemy.orm import Mapped, relationship, relationship
 
-from base import Base
-from base import intpk, intfk_tid, intfk_gid, str_3 
-from base import timestamp_created, timestamp_updated
-from base import game_team_join
+from src.data_models.base import Base
+from src.data_models.base import intpk, intfk_tid, intfk_gid, str_3 
+from src.data_models.base import timestamp_created, timestamp_updated
+from src.data_models.base import game_team_join
 
-from player import Player
 
-from game import Game
+# Use TYPE_CHECKING constant to prevent the circular imports
+if TYPE_CHECKING:
+    from src.data_models.game import Game
+    from src.data_models.player import Player
 
 
 class Team(Base):
@@ -20,9 +22,9 @@ class Team(Base):
     tid: Mapped[intpk] 
     name: Mapped[str] # Team name - Buffalo Sabres
     abbr: Mapped[str_3] # Abbreviation - BUF.
-    
+
     # Many-to-Many relationship between Team and Game class objects
-    games: Mapped[List[Game]] = relationship(secondary=game_team_join, back_populates="team")
+    games: Mapped[List[Game]] = relationship(secondary=game_team_join, back_populates="teams")
 
     # One-to-Many relationship between Team and Player objects
     players: Mapped[List[Player]] = relationship(back_populates="team")

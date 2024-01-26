@@ -1,13 +1,19 @@
 from __future__ import annotations
+from typing import List, TYPE_CHECKING
 from datetime import timedelta 
 
 from sqlalchemy.orm import Mapped, relationship, relationship
 
-from base import Base
-from base import intpk, intfk_gid, intfk_tid, intfk_pid, str_2
-from base import timestamp_created, timestamp_updated
+from src.data_models.base import Base
+from src.data_models.base import intpk, intfk_gid, intfk_tid, intfk_pid, str_2
+from src.data_models.base import timestamp_created, timestamp_updated
+from src.data_models.base import game_player_join
 
-from team import Team
+
+# Use TYPE_CHECKING constant to prevent the circular imports
+if TYPE_CHECKING:
+    from src.data_models.team import Team
+    from src.data_models.game import Game
 
 
 # Basic information about each hockey player.
@@ -25,6 +31,9 @@ class Player(Base):
 
     # Many-to-One relationship between Player and Team class objects
     team: Mapped[Team] = relationship(back_populates="player")
+
+    # Many-to-Many relationship between Team and Game class objects
+    games: Mapped[List[Game]] = relationship(secondary=game_player_join, back_populates="players")
 
     # Record info
     created: Mapped[timestamp_created]
@@ -82,6 +91,10 @@ class GoalieStat(Base):
     pim: Mapped[int] # Penalties in Minutes
     en: Mapped[bool] # Empty Net (True/False)
     enga: Mapped[int] # Empty Net Goal Against
+    
+    # Record info 
+    created: Mapped[timestamp_created]
+    updated: Mapped[timestamp_updated]
 
 
 class SkaterStatAdvanced(Base):
@@ -104,3 +117,7 @@ class SkaterStatAdvanced(Base):
     ozsp: Mapped[float] # Offensive Zone start %
     hit: Mapped[int] # Hits
     blk: Mapped[int] # Blocks
+    
+    # Record info 
+    created: Mapped[timestamp_created]
+    updated: Mapped[timestamp_updated]
