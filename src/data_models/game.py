@@ -44,7 +44,7 @@ class Game(Base):
         else:
             return self.htid
 
-    # How game ended: ft - fulltime | ot - overtime | so - shootout
+    # How game ended: FT - fulltime | OT - overtime | SO - shootout
     end: Mapped[str_2] 
     
     # Many-to-Many relationships between Game and Team, Player class objects

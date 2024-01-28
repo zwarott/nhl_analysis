@@ -1,16 +1,12 @@
 from typing import Type
 
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
 from config import DATABASE_URL
 
 from src.data_models.base import Base
-from src.data_models.team import Team
-from src.data_models.nhl_teams import teams_dict 
-
-from src.web_scraping.team_scraper import df_teams
 
 from src.database.decorators import timer
 
@@ -22,26 +18,47 @@ if DATABASE_URL is not None:
 
 engine = create_engine(db_url[0])
 
-
-# Set up Session factory
+# Bind the engine to a session 
 Session = sessionmaker(engine)
 
+
 @timer
-def insert_df(class_obj: Type[Base], df: pd.DataFrame) -> None:
+def populate_db_table(class_obj: Type[Base], df: pd.DataFrame) -> None:
+    """Populate empty db table.
+
+    Insert pandas DataFrame into emtpy PostgreSQL database table.
+
+    Parameters
+    ----------
+    class_obj: Type[Base]
+        Class object of SQLAlchemy ORM models derived from the
+        Base class.
+    df: pandas.DataFrame
+        Pandas DataFrame as input data to be imported.
+
+    Returns
+    -------
+    None
+
+    """
     # Convert DataFrame to list of dictionaries
     data = df.to_dict(orient="records")
+
     # Construct Session with begin() method for handling each transaction
     # The transaction is automatically committed or rolled back when exiting the 'with' block
     with Session.begin() as session:
-        print(f"Importing data into {class_obj.__name__}.")
+        print(f"Importing data into {class_obj.__name__} object.")
+        # row is a dictionary containing key-value pairs where the keys correspond to column names
         for row in data:
+            # Unpack dictionary with keys matching the attribute names of a class
+            # and reate an instance of that class with the corresponding values
             record = class_obj(**row)
             session.add(record)
-            # Commits the transaction, closes the session
         # Print number of imported records
-        imported_count = session.query(class_obj).count()  
+        imported_count = len(session.scalars(select(class_obj)).all())
         print(f"Imported records: {imported_count}")
 
 
-insert_df(Team, df_teams(teams_dict))
+# append_data
 
+# delete_data 

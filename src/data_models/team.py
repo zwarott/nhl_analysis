@@ -52,7 +52,7 @@ class TeamStat(Base):
     shg: Mapped[int] # Short-Handed Goals
     sog: Mapped[int] # Shot on Goal
     sp: Mapped[float] # Shooting Percentage
-
+    
     # Record info 
     created: Mapped[timestamp_created]
     updated: Mapped[timestamp_updated]
