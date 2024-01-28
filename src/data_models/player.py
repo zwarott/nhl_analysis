@@ -30,7 +30,7 @@ class Player(Base):
     tid: Mapped[intfk_tid]
 
     # Many-to-One relationship between Player and Team class objects
-    team: Mapped[Team] = relationship(back_populates="player")
+    team: Mapped[Team] = relationship(back_populates="players")
 
     # Many-to-Many relationship between Team and Game class objects
     games: Mapped[List[Game]] = relationship(secondary=game_player_join, back_populates="players")
