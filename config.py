@@ -6,5 +6,5 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Acces environment variables
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DEVELOPMENT_DATABASE_URL")
 

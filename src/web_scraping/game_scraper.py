@@ -1,24 +1,12 @@
 import pandas as pd
 import numpy as np
 
-from sqlalchemy import create_engine, select
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import select
 
-from config import DATABASE_URL
+from src.session_config import Session
 
 from src.data_models.nhl_teams import teams_dict
 from src.data_models.team import Team
-
-
-# Check if DATABASE_URL is not None before setting engine 
-db_url = []
-if DATABASE_URL is not None:
-    db_url.append(DATABASE_URL)
-
-engine = create_engine(db_url[0])
-
-# Bind the engine to a session
-Session = sessionmaker(bind=engine)
 
 
 def df_games_played() -> pd.DataFrame:

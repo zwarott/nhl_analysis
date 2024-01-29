@@ -1,5 +1,7 @@
 import pandas as pd
 
+from src.session_config import Session
+
 from src.data_models.nhl_teams import teams_dict
 
 from src.web_scraping.game_scraper import df_for_scraping
