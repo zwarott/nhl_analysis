@@ -4,7 +4,7 @@ from src.session_config import Session
 
 from src.data_models.nhl_teams import teams_dict
 
-from src.web_scraping.game_scraper import df_for_scraping
+from src.data_preparation.game_data import df_for_scraping
 
 
 def df_teams() -> pd.DataFrame:
@@ -26,6 +26,8 @@ def df_team_stats() -> pd.DataFrame:
     """
 
     """
+    team_stats = []
+    
     
     df_all_games = df_for_scraping()
     

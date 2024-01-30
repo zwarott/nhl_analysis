@@ -6,6 +6,7 @@ from sqlalchemy import select
 from src.session_config import Session
 
 from src.data_models.nhl_teams import teams_dict
+from src.data_models.game import Game
 from src.data_models.team import Team
 
 
@@ -13,6 +14,8 @@ def df_games_played() -> pd.DataFrame:
     """Scrape all games played.
 
     Scrape all NHL games played in order to populate empty database table.
+    After that filter games played only, fill missing data and rename order
+    drop selected columns.
 
     Returns
     -------
@@ -96,27 +99,35 @@ def df_games_last(above_date: str) -> pd.DataFrame:
     return df_last_games
 
 
-def df_for_scraping() -> pd.DataFrame:
+def df_for_scraping() -> list:
     """Prepare games data for further scraping.
 
     Prepare NHL games played data for further scraping such as
-    team stats, player stats etc.
+    team stats, player stats etc. Game id (gid), game date (date)
+    and ids (atid, htid) of both team are required. Need to join
+    team abbreviations for home teams (abbr) from Team table as well.
 
     Returns
     -------
-    pd.DataFrame
-        Pandas DataFrame representing simplified data for further
-        scraping.
+    list
+        List representing simplified data for further scraping.
     """
+    with Session.begin() as session:
+        stmt = (
+            select(Game.gid, Game.date, Game.atid, Game.htid, Team.abbr)
+            .join(Team, Team.tid == Game.htid)
+        )    
+        
+        # Select all games played with joined abbreviations of home teams
+        games_played = session.execute(stmt)
+        
+        # Remove dashes from game dates and each row converts to list and
+        # append it to empty list
+        modified_data = []
+        for row in games_played:
+            modified_row = list(row) 
+            # Index number 1 is position of date column value
+            modified_row[1] = modified_row[1].strftime("%Y%m%d")
+            modified_data.append(modified_row)
     
-    # DataFrame with all games played
-    all_games_played = df_games_played()
-    
-    # Filter date, visotor team and home team only
-    selected_cols = ["date", "atid", "htid"]
-    all_games_played = all_games_played[selected_cols]
-
-    # Remove dash symbol for further scraping
-    all_games_played["date"] = all_games_played["date"].str.replace("-", "")
-
-    return all_games_played
+        return modified_data
