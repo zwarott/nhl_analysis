@@ -4,7 +4,6 @@ import numpy as np
 from sqlalchemy import select
 
 from src.session_config import Session
-
 from src.data_models.nhl_teams import teams_dict
 from src.data_models.game import Game
 from src.data_models.team import Team
@@ -70,27 +69,24 @@ def df_games_played() -> pd.DataFrame:
 
 
 def df_games_last(above_date: str) -> pd.DataFrame:
-    """Scrape last games played.
-
-    Scraped last NHL games played in order to append latest game data
-    into database table.
+    """Scrape lastest game data.
 
     Parameters
     ----------
-    above_data: str
-        String representing date above that data will be scraped.
+    above_date: str
+        String representing last scraped game date.
         Put date in format YYYY-MM-DD -> 2024-01-01. 
 
     Returns
     -------
     pd.DataFrame
-        Pandas DataFrame that represents last games played.
+        Pandas DataFrame that represents lastest game data.
     """
     
     # All games played
     all_games_played = df_games_played()
 
-    # prepare above_date variable for query purposes
+    # Prepare above_date variable for query purposes
     above_date = above_date
 
     # Filter last games played only
@@ -99,13 +95,13 @@ def df_games_last(above_date: str) -> pd.DataFrame:
     return df_last_games
 
 
-def df_for_scraping() -> list:
+def scraping_data() -> list:
     """Prepare games data for further scraping.
 
     Prepare NHL games played data for further scraping such as
     team stats, player stats etc. Game id (gid), game date (date)
     and ids (atid, htid) of both team are required. Need to join
-    team abbreviations for home teams (abbr) from Team table as well.
+    abbreviations of home teams (abbr) from Team table as well.
 
     Returns
     -------
@@ -131,3 +127,27 @@ def df_for_scraping() -> list:
             modified_data.append(modified_row)
     
         return modified_data
+
+
+def scraping_links() -> list:
+    """Links of each game played.
+
+    Links of each game played for scraping team and player stats.
+
+    Returns
+    -------
+    List
+        A list representing links of each game played for further
+        data scraping such as team and player stats.
+    """
+    # Indexes: 0-gid, 1-date, 2-atid, 3-htid, 4-htid abbr
+    df_all_games = scraping_data()
+    
+    # List for each game link 
+    links = []
+    for i in range(len(df_all_games)):
+        for df_all_games[i] in df_all_games:
+            link = "https://www.hockey-reference.com/boxscores/"
+            links.append(f"{link}{df_all_games[i][1]}0{df_all_games[i][4]}.html")
+
+    return links

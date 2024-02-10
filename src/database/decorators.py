@@ -9,7 +9,7 @@ def timer(func):
         start_time = time()
         result = func(*args, **kwargs)
         duration = time() - start_time
-        print(f"Process time: {duration:.4f} s.")
+        print(f"Process time: {duration:.2f} s.")
         return result
 
     return wrapper

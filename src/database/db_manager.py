@@ -4,17 +4,15 @@ import pandas as pd
 from sqlalchemy import select
 
 from src.session_config import Session
-
 from src.data_models.base import Base
-
 from src.database.decorators import timer
 
 
 @timer
 def populate_db_table(class_obj: Type[Base], df: pd.DataFrame) -> None:
-    """Populate empty db table.
+    """Populate db table.
 
-    Insert pandas DataFrame into emtpy PostgreSQL database table.
+    Insert/append pandas DataFrame into PostgreSQL database table.
 
     Parameters
     ----------
@@ -39,14 +37,19 @@ def populate_db_table(class_obj: Type[Base], df: pd.DataFrame) -> None:
         # row is a dictionary containing key-value pairs where the keys correspond to column names
         for row in data:
             # Unpack dictionary with keys matching the attribute names of a class
-            # and reate an instance of that class with the corresponding values
+            # and create an instance of that class with the corresponding values
             record = class_obj(**row)
             session.add(record)
-        # Print number of imported records
-        imported_count = len(session.scalars(select(class_obj)).all())
-        print(f"Imported records: {imported_count}")
+        # Number of imported records
+        imported_count = len(data)
+        # Total number of records in db table
+        total_count = len(session.scalars(select(class_obj)).all())
 
+        print(
+            f"Imported records: {imported_count}", 
+            f"Total records in db table: {total_count}",
+            sep="\n"
+              )
 
-# append_data
 
 # delete_data 
