@@ -4,7 +4,7 @@ from typing import Union
 import pandas as pd
 from sqlalchemy import select
 
-from src.logging_setup import logging_setup
+from src.logging_setup import logger 
 from src.session_config import session 
 from src.data_models.nhl_teams import teams_dict
 from src.data_models.game import Game
@@ -14,11 +14,7 @@ from src.data_preparation.game_data import scraping_data, scraping_links
 from decorators import timer
 
 
-# Call setup_logging to configure logging
-logger = logging_setup()
-
-
-def df_teams() -> pd.DataFrame:
+def teams() -> pd.DataFrame:
     """Prepare data of NHL teams.
 
     Retruns

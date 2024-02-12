@@ -11,3 +11,6 @@ def logging_setup():
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger
+
+# Initialize logger
+logger = logging_setup()

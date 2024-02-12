@@ -9,7 +9,7 @@ from src.data_models.game import Game
 from src.data_models.team import Team
 
 
-def df_games_played() -> pd.DataFrame:
+def games_played() -> pd.DataFrame:
     """Scrape all games played.
 
     Scrape all NHL games played in order to populate empty database table.
@@ -39,7 +39,7 @@ def df_games_played() -> pd.DataFrame:
 
     # Filter played games only with selected columns
     df_filtered = df_all_games[df_all_games["htg"].notna()].iloc[:, :8]
-    
+
     # Replace team names by team abbreviations
     # Dictionary key is old value and dictinary values is a new value
     df_filtered.loc[:, "home"] = df_filtered.loc[:, "home"].replace(teams_dict)
@@ -68,7 +68,7 @@ def df_games_played() -> pd.DataFrame:
     return df_filtered 
 
 
-def df_games_last(above_date: str) -> pd.DataFrame:
+def games_last(above_date: str) -> pd.DataFrame:
     """Scrape lastest game data.
 
     Parameters
@@ -84,7 +84,7 @@ def df_games_last(above_date: str) -> pd.DataFrame:
     """
     
     # All games played
-    all_games_played = df_games_played()
+    all_games_played = games_played()
 
     # Prepare above_date variable for query purposes
     above_date = above_date
