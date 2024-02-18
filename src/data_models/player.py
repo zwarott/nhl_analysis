@@ -22,7 +22,6 @@ class Player(Base):
     
     # Player info
     pid: Mapped[intpk]
-    number: Mapped[int] # Player number
     name: Mapped[str] # Player name 
     pos: Mapped[str_2] # Player position
 
@@ -41,7 +40,7 @@ class Player(Base):
 
 #
 class SkaterStat(Base):
-    __tablename__ = "player_stat"
+    __tablename__ = "skater_stat"
     
     # Basic info 
     sid: Mapped[intpk]
@@ -73,7 +72,7 @@ class SkaterStat(Base):
 
 
 class GoalieStat(Base):
-    __tablename__ = "goalie"
+    __tablename__ = "goalie_stat"
 
     # Basic info 
     sid: Mapped[intpk]
@@ -98,7 +97,7 @@ class GoalieStat(Base):
 
 
 class SkaterStatAdvanced(Base):
-    __tablename__ = "player_stat_advanced"
+    __tablename__ = "skater_stat_advanced"
     
     # Basic info 
     sid: Mapped[intpk]
