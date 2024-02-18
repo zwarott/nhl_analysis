@@ -4,6 +4,7 @@ import numpy as np
 from sqlalchemy import select
 
 from src.session_config import Session
+
 from src.data_models.nhl_teams import teams_dict
 from src.data_models.game import Game
 from src.data_models.team import Team

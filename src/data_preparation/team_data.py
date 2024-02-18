@@ -6,9 +6,11 @@ from sqlalchemy import select
 
 from src.logging_setup import logger 
 from src.session_config import session 
+
 from src.data_models.nhl_teams import teams_dict
 from src.data_models.game import Game
 from src.data_models.team import TeamStat, TeamStatAdvanced
+
 from src.data_preparation.game_data import scraping_data, scraping_links 
 
 from decorators import timer
@@ -22,7 +24,6 @@ def teams() -> pd.DataFrame:
     pd.DataFrame
         Pandas DataFrame created from dictionary.
     """
-    
     # Create DataFrame from the teams_dict and transpose import
     df_all_teams = pd.DataFrame(list(teams_dict.items()), columns=['name', 'abbr'])
 
@@ -30,7 +31,7 @@ def teams() -> pd.DataFrame:
 
 
 @timer
-def basic_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
+def basic_team_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
     """Scrape basic team stats from selected games.
 
     Parameters
@@ -48,7 +49,6 @@ def basic_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
         for a single game.
 
     """
-    
     # Last gid number in Game object
     game_gid = session.scalars(
         select(Game.gid)
@@ -72,7 +72,7 @@ def basic_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
     # If num_games is sepcified and TeamStat object is empty, modify range
     # of scraped team stats
     elif num_games and not team_stat_gid:
-        game_gid = 0 + num_games
+        game_gid = num_games
     
     # If TeamStat object is empty, set up value as O (first value from list)
     elif not team_stat_gid:
@@ -130,7 +130,7 @@ def basic_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
 
 
 @timer
-def advanced_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
+def advanced_team_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
     """Scrape advanced team stats from selected games.
 
     Parameters
@@ -163,7 +163,7 @@ def advanced_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
         .limit(1)
     ).first() 
    
-    # If num_games is specified and TeamStatAdvanced object is not empty, modify
+    # Ifnum_games is specified and TeamStatAdvanced object is not empty, modify
     # range of scraped team advanced stats
     if num_games and team_stat_gid:
         game_gid = team_stat_gid + num_games
@@ -171,7 +171,7 @@ def advanced_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
     # If num_games is sepcified and TeamStatAdvanced object is empty, modify range
     # of scraped team advanced stats
     elif num_games and not team_stat_gid:
-        game_gid = 0 + num_games
+        game_gid = num_games
 
     # If TeamStatAdvanced object is empty, set up value as O (first value from list)
     elif not team_stat_gid:
