@@ -10,9 +10,9 @@ from src.session_config import session, Session
 from src.data_models.nhl_teams import team_abbreviations
 from src.data_models.game import Game
 from src.data_models.team import Team
-from src.data_models.player import Player, SkaterStat, SkaterStatAdvanced, GoalieStat
+from src.data_models.player import Player, SkaterStat, SkaterStatAdvanced
 
-from src.data_preparation.game_data import scraping_data, scraping_links
+from src.data_preprocessing.game_data import scraping_data, scraping_links
 
 from decorators import timer
 

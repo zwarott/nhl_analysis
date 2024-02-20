@@ -11,7 +11,7 @@ from src.data_models.nhl_teams import teams_dict
 from src.data_models.game import Game
 from src.data_models.team import TeamStat, TeamStatAdvanced
 
-from src.data_preparation.game_data import scraping_data, scraping_links 
+from src.data_preprocessing.game_data import scraping_data, scraping_links 
 
 from decorators import timer
 
