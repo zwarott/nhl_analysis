@@ -11,9 +11,9 @@ from src.data_models.game import Game
 from src.data_models.team import TeamStat, TeamStatAdvanced
 from src.data_models.player import SkaterStat, SkaterStatAdvanced
 
-from src.data_preparation.game_data import games_last
-from src.data_preparation.team_data import basic_team_stats, advanced_team_stats
-from src.data_preparation.player_data import basic_skater_stats, advanced_skater_stats
+from src.data_preprocessing.game_data import games_last
+from src.data_preprocessing.team_data import basic_team_stats, advanced_team_stats
+from src.data_preprocessing.player_data import basic_skater_stats, advanced_skater_stats
 
 
 @timer
