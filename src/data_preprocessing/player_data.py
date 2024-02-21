@@ -86,7 +86,7 @@ def players():
 def new_player(tid: int, player_name: str) -> None:
     """Add new player into db table.
 
-    If there are any new player, scrape data about him
+    If there are any new player in team, scrape data about him
     and import these data into player table.
 
     Parameters
@@ -133,7 +133,7 @@ def new_player(tid: int, player_name: str) -> None:
     # Convert DataFrame to list of dictionaries
     data = new_player_stat.to_dict(orient="records")
     with Session.begin() as sess:
-        print(f"Importing a new player into Player object...")
+        print(f"Importing a new player ({player_name}) into Player object...")
         # row is a dictionary containing key-value pairs where the keys correspond to column names
         for row in data:
             # Unpack dictionary with keys matching the attribute names of a class
@@ -233,50 +233,78 @@ def basic_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
         # Player names in list for replacing them by pid values
         atid_skaters = atid_skater_stats["Player"].tolist()
         htid_skaters = htid_skater_stats["Player"].tolist()
-
+        
         # Prepare pid values for away team
         atid_pid = []
         for skater in atid_skaters:
+            # Get a list with all skater's pids
+            # There will be more than 1 if player played for one or more teams and
+            # now plays for another one
             skater_pid = session.scalars(
                 select(Player.pid)
                 .where(Player.name == skater)
-            ).first()
+            ).all()
 
-            # If skater is not in player table, create a new record in database 
-            # and append new pid into list above
+            # Get a list with all skater's tids 
+            # There will be more than 1 if player played for one or more teams and
+            # now plays for another one
+            skater_tid = session.scalars(
+                select(Player.tid)
+                .where(Player.name == skater)
+            ).all()
+
+            # If skater is not in player table yet, add him into player table 
+            # and append his pid into list above
             if not skater_pid:
                 new_player(atid, skater)
-                skater_pid = session.scalars(
-                    select(Player.pid)
-                    .where(Player.name == skater)
-                ).first()
-                atid_pid.append(skater_pid)
+                atid_pid.append(skater_pid[-1])
             
-            # If skater exists, append him into list above
+            # If skater changed team and his current tid is not equal to a new
+            # team's tid, add him into player table and append his new pid 
+            # into list above
+            if atid not in skater_tid:
+                new_player(atid, skater)
+                atid_pid.append(skater_pid[-1])
+
+            # Else add appropriate pid into list above 
             else:
-                atid_pid.append(skater_pid)
+                atid_pid.append(skater_pid[-1])
         
         # Prepare pid values for home team
         htid_pid = []
         for skater in htid_skaters:
+            # Get a list with all skater's pids
+            # There will be more than 1 if player played for one or more teams and
+            # now plays for another one
             skater_pid = session.scalars(
                 select(Player.pid)
                 .where(Player.name == skater)
-            ).first()
+            ).all()
 
-            # If skater is not in player table, create a new record in database 
-            # and append new pid into list above
+            # Get a list with all skater's tids 
+            # There will be more than 1 if player played for one or more teams and
+            # now plays for another one
+            skater_tid = session.scalars(
+                select(Player.tid)
+                .where(Player.name == skater)
+            ).all()
+
+            # If skater is not in player table yet, add him into player table 
+            # and append his pid into list above
             if not skater_pid:
                 new_player(htid, skater)
-                skater_pid = session.scalars(
-                    select(Player.pid)
-                    .where(Player.name == skater)
-                ).first()
-                htid_pid.append(skater_pid)
+                htid_pid.append(skater_pid[-1])
+            
+            # If skater changed team and his current tid is not equal to a new
+            # team's tid, add him into player table and append his new pid 
+            # into list above
+            if htid not in skater_tid:
+                new_player(atid, skater)
+                htid_pid.append(skater_pid[-1])
 
-            # If skater exists, append him into list above
+            # Else add appropriate pid into list above 
             else:
-                htid_pid.append(skater_pid)
+                htid_pid.append(skater_pid[-1])
 
         # Relace player names by pid values
         atid_skater_stats["Player"] = atid_pid        
@@ -394,47 +422,75 @@ def advanced_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
         # Prepare pid values for away team
         atid_pid = []
         for skater in atid_skaters:
+            # Get a list with all skater's pids
+            # There will be more than 1 if player played for one or more teams and
+            # now plays for another one
             skater_pid = session.scalars(
                 select(Player.pid)
                 .where(Player.name == skater)
-            ).first()
+            ).all()
 
-            # If skater is not in player table, create a new record in database 
-            # and append new pid into list above
+            # Get a list with all skater's tids 
+            # There will be more than 1 if player played for one or more teams and
+            # now plays for another one
+            skater_tid = session.scalars(
+                select(Player.tid)
+                .where(Player.name == skater)
+            ).all()
+
+            # If skater is not in player table yet, add him into player table 
+            # and append his pid into list above
             if not skater_pid:
                 new_player(atid, skater)
-                skater_pid = session.scalars(
-                    select(Player.pid)
-                    .where(Player.name == skater)
-                ).first()
-                atid_pid.append(skater_pid)
+                atid_pid.append(skater_pid[-1])
             
-            # If skater exists, append him into list above
+            # If skater changed team and his current tid is not equal to a new
+            # team's tid, add him into player table and append his new pid 
+            # into list above
+            if atid not in skater_tid:
+                new_player(atid, skater)
+                atid_pid.append(skater_pid[-1])
+
+            # Else add appropriate pid into list above 
             else:
-                atid_pid.append(skater_pid)
+                atid_pid.append(skater_pid[-1])
         
         # Prepare pid values for home team
         htid_pid = []
         for skater in htid_skaters:
+            # Get a list with all skater's pids
+            # There will be more than 1 if player played for one or more teams and
+            # now plays for another one
             skater_pid = session.scalars(
                 select(Player.pid)
                 .where(Player.name == skater)
-            ).first()
+            ).all()
 
-            # If skater is not in player table, create a new record in database 
-            # and append new pid into list above
+            # Get a list with all skater's tids 
+            # There will be more than 1 if player played for one or more teams and
+            # now plays for another one
+            skater_tid = session.scalars(
+                select(Player.tid)
+                .where(Player.name == skater)
+            ).all()
+
+            # If skater is not in player table yet, add him into player table 
+            # and append his pid into list above
             if not skater_pid:
                 new_player(htid, skater)
-                skater_pid = session.scalars(
-                    select(Player.pid)
-                    .where(Player.name == skater)
-                ).first()
-                htid_pid.append(skater_pid)
+                htid_pid.append(skater_pid[-1])
+            
+            # If skater changed team and his current tid is not equal to a new
+            # team's tid, add him into player table and append his new pid 
+            # into list above
+            if htid not in skater_tid:
+                new_player(atid, skater)
+                htid_pid.append(skater_pid[-1])
 
-            # If skater exists, append him into list above
+            # Else add appropriate pid into list above 
             else:
-                htid_pid.append(skater_pid)
-        
+                htid_pid.append(skater_pid[-1])
+
         # Relace player names by pid values
         atid_skater_stats["Player"] = atid_pid        
         htid_skater_stats["Player"] = htid_pid
