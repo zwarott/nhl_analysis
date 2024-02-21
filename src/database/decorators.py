@@ -9,7 +9,11 @@ def timer(func):
         start_time = time()
         result = func(*args, **kwargs)
         duration = time() - start_time
-        print(f"Process time: {duration:.2f} s.")
+        # Calculate minutes and remaining seconds
+        minutes, seconds = divmod(duration, 60)
+        minutes = int(minutes)
+        print(f"Process time: {minutes} minutes {seconds:.2f} seconds.")
         return result
 
     return wrapper
+
