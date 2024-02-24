@@ -9,11 +9,11 @@ from src.database.decorators import timer
 from src.data_models.base import Base
 from src.data_models.game import Game
 from src.data_models.team import TeamStat, TeamStatAdvanced
-from src.data_models.player import SkaterStat, SkaterStatAdvanced
+from src.data_models.player import SkaterStat, SkaterStatAdvanced, GoalieStat
 
 from src.data_preprocessing.game_data import games_last
 from src.data_preprocessing.team_data import basic_team_stats, advanced_team_stats
-from src.data_preprocessing.player_data import basic_skater_stats, advanced_skater_stats
+from src.data_preprocessing.player_data import basic_skater_stats, advanced_skater_stats, basic_goalie_stats
 
 
 @timer
@@ -65,7 +65,7 @@ def update_all_tables(last_game_date: str) -> None:
     """Update all database tables.
 
     Scrape all missing data and insert them into game,
-    team and player tables.
+    team and player tables (skater, goalie).
     """
     # Append last games stats
     populate_db_table(Game, games_last(last_game_date))
@@ -80,4 +80,7 @@ def update_all_tables(last_game_date: str) -> None:
     populate_db_table(SkaterStat, basic_skater_stats())
 
     # Append last advanced skater stats 
-    # populate_db_table(SkaterStatAdvanced, advanced_skater_stats())
+    populate_db_table(SkaterStatAdvanced, advanced_skater_stats())
+
+    # Append last basic goalie stats
+    populate_db_table(GoalieStat, basic_goalie_stats())
