@@ -16,7 +16,6 @@ if TYPE_CHECKING:
     from src.data_models.game import Game
 
 
-# Basic information about each hockey player.
 class Player(Base):
     __tablename__ = "player" 
     
@@ -38,7 +37,7 @@ class Player(Base):
     created: Mapped[timestamp_created]
     updated: Mapped[timestamp_updated]
 
-#
+
 class SkaterStat(Base):
     __tablename__ = "skater_stat"
     
@@ -81,13 +80,14 @@ class GoalieStat(Base):
     gid: Mapped[intfk_gid]
 
     # Goalie stats
-    dec: Mapped[str] # Decision (W - win, L - loss)
+    dec: Mapped[str] # Decision (W - win, L - loss, O - overtime, )
     ga: Mapped[int] # Goal Against
     sa: Mapped[int] # Shot Against
     sv: Mapped[int] # Saves
     svp: Mapped[int] # Saves Percentage 
     so: Mapped[int] # Shutouts 
     pim: Mapped[int] # Penalties in Minutes
+    toi: Mapped[timedelta] # Time on Ice in format mm:ss
     en: Mapped[bool] # Empty Net (True/False)
     enga: Mapped[int] # Empty Net Goal Against
     
