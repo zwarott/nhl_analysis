@@ -225,7 +225,7 @@ def basic_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             select(Team.abbr)
             .where(Team.tid == htid)
         ).first()
-        logger.info(f"Scraping {idx}/{len(game_data)} basic player stats from gid ({gid}) | {atid_abbr} x {htid_abbr}...")
+        logger.info(f"Scraping {idx}/{len(game_data)} basic skater stats from gid ({gid}) | {atid_abbr} x {htid_abbr}...")
 
         # Scrape skater stats for each game using pandas
         # 2 index -> atid | 4 index -> htid
@@ -266,6 +266,11 @@ def basic_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # and append his pid into list above
             if not skater_pid:
                 new_player(atid, skater)
+                # Refresh skater_pid after adding the new player
+                skater_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == skater)
+                ).all()
                 atid_pid.append(skater_pid[-1])
             
             # If skater changed team and his current tid is not equal to a new
@@ -273,6 +278,11 @@ def basic_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # into list above
             elif skater_pid and atid not in skater_tid:
                 new_player(atid, skater)
+                # Refresh skater_pid after adding the new player
+                skater_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == skater)
+                ).all()
                 atid_pid.append(skater_pid[-1])
 
             # Else add appropriate pid into list above 
@@ -302,6 +312,11 @@ def basic_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # and append his pid into list above
             if not skater_pid:
                 new_player(htid, skater)
+                # Refresh skater_pid after adding the new player
+                skater_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == skater)
+                ).all()
                 htid_pid.append(skater_pid[-1])
             
             # If skater changed team and his current tid is not equal to a new
@@ -309,6 +324,11 @@ def basic_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # into list above
             elif skater_pid and htid not in skater_tid:
                 new_player(htid, skater)
+                # Refresh skater_pid after adding the new player
+                skater_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == skater)
+                ).all()
                 htid_pid.append(skater_pid[-1])
 
             # Else add appropriate pid into list above 
@@ -424,7 +444,7 @@ def advanced_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             select(Team.abbr)
             .where(Team.tid == htid)
         ).first()
-        logger.info(f"Scraping {idx}/{len(game_data)} advanced player stats for gid ({gid}) | {atid_abbr} x {htid_abbr}...")
+        logger.info(f"Scraping {idx}/{len(game_data)} advanced skater stats for gid ({gid}) | {atid_abbr} x {htid_abbr}...")
 
         # Scrape skater advanced stats for each game using pandas
         # All situations: 6 index -> atid | 13 index -> htid
@@ -459,6 +479,11 @@ def advanced_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # and append his pid into list above
             if not skater_pid:
                 new_player(atid, skater)
+                # Refresh skater_pid after adding the new player
+                skater_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == skater)
+                ).all()
                 atid_pid.append(skater_pid[-1])
             
             # If skater changed team and his current tid is not equal to a new
@@ -466,6 +491,11 @@ def advanced_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # into list above
             elif skater_pid and atid not in skater_tid:
                 new_player(atid, skater)
+                # Refresh skater_pid after adding the new player
+                skater_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == skater)
+                ).all()
                 atid_pid.append(skater_pid[-1])
 
             # Else add appropriate pid into list above 
@@ -495,6 +525,11 @@ def advanced_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # and append his pid into list above
             if not skater_pid:
                 new_player(htid, skater)
+                # Refresh skater_pid after adding the new player
+                skater_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == skater)
+                ).all()
                 htid_pid.append(skater_pid[-1])
             
             # If skater changed team and his current tid is not equal to a new
@@ -502,6 +537,11 @@ def advanced_skater_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # into list above
             elif skater_pid and htid not in skater_tid:
                 new_player(htid, skater)
+                # Refresh skater_pid after adding the new player
+                skater_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == skater)
+                ).all()
                 htid_pid.append(skater_pid[-1])
 
             # Else add appropriate pid into list above 
@@ -702,6 +742,11 @@ def basic_goalie_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # and append his pid into list above
             if not goalie_pid: 
                 new_player(atid, goalie)
+                # Refresh skater_pid after adding the new player
+                goalie_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == goalie)
+                ).all()
                 atid_pid.append(goalie_pid[-1])
             
             # If goalie changed team and his current tid is not equal to a new
@@ -709,6 +754,11 @@ def basic_goalie_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # into list above
             elif goalie_pid and atid not in goalie_tid:
                 new_player(atid, goalie)
+                # Refresh skater_pid after adding the new player
+                goalie_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == goalie)
+                ).all()
                 atid_pid.append(goalie_pid[-1])
 
             # Else add appropriate pid into list above 
@@ -738,6 +788,11 @@ def basic_goalie_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # and append his pid into list above
             if not goalie_pid:
                 new_player(htid, goalie)
+                # Refresh skater_pid after adding the new player
+                goalie_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == goalie)
+                ).all()
                 htid_pid.append(goalie_pid[-1])
             
             # If goalie changed team and his current tid is not equal to a new
@@ -745,6 +800,11 @@ def basic_goalie_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
             # into list above
             elif goalie_pid and htid not in goalie_tid:
                 new_player(htid, goalie)
+                # Refresh skater_pid after adding the new player
+                goalie_pid = session.scalars(
+                    select(Player.pid)
+                    .where(Player.name == goalie)
+                ).all()
                 htid_pid.append(goalie_pid[-1])
 
             # Else add appropriate pid into list above 
