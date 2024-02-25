@@ -9,7 +9,7 @@ from src.session_config import session
 
 from src.data_models.nhl_teams import teams_dict
 from src.data_models.game import Game
-from src.data_models.team import TeamStat, TeamStatAdvanced
+from src.data_models.team import Team, TeamStat, TeamStatAdvanced
 
 from src.data_preprocessing.game_data import scraping_data, scraping_links 
 
@@ -92,9 +92,18 @@ def basic_team_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
 
     # Iterate over each game data and web link
     for idx, (data, link) in enumerate(zip(game_data, game_links), start=1):
-        logger.info(f"Scraping {idx}/{len(game_data)} basic team stats...")
-
         gid, atid, htid = data[0], data[2], data[3]
+        # Get the atid abbr for logging purposes
+        atid_abbr = session.scalars(
+            select(Team.abbr)
+            .where(Team.tid == atid)
+        ).first()
+        # Get the htid abbr for logging purposes
+        htid_abbr = session.scalars(
+            select(Team.abbr)
+            .where(Team.tid == htid)
+        ).first()
+        logger.info(f"Scraping {idx}/{len(game_data)} basic team stats from game ({gid}) | {atid_abbr} x {htid_abbr}...")
 
         # Scrape team stats for each game using pandas + drop nan values
         # 2 index -> atid | 4 index -> htid
@@ -191,9 +200,18 @@ def advanced_team_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
 
     # Iterate over each game data and web link
     for idx, (data, link) in enumerate(zip(game_data, game_links), start=1):
-        logger.info(f"Scraping {idx}/{len(game_data)} advanced team stats...")
-
         gid, atid, htid = data[0], data[2], data[3]
+        # Get the atid abbr for logging purposes
+        atid_abbr = session.scalars(
+            select(Team.abbr)
+            .where(Team.tid == atid)
+        ).first()
+        # Get the htid abbr for logging purposes
+        htid_abbr = session.scalars(
+            select(Team.abbr)
+            .where(Team.tid == htid)
+        ).first()
+        logger.info(f"Scraping {idx}/{len(game_data)} advanced team stats from game ({gid}) | {atid_abbr} x {htid_abbr}...")
 
         # Scrape team advanced stats for each game using pandas + drop nan values
         # 6 index -> atid | 7 index -> htid
