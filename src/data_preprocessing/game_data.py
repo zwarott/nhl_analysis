@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from sqlalchemy import select
+from sqlalchemy import select, desc
 
 from src.session_config import Session
 
@@ -69,14 +69,8 @@ def games_played() -> pd.DataFrame:
     return df_filtered 
 
 
-def games_last(above_date: str) -> pd.DataFrame:
-    """Scrape lastest game data.
-
-    Parameters
-    ----------
-    above_date: str
-        String representing last scraped game date.
-        Put date in format YYYY-MM-DD -> 2024-01-01. 
+def games_last(): 
+    """Scrape lastest game data that are not within database.
 
     Returns
     -------
@@ -87,13 +81,25 @@ def games_last(above_date: str) -> pd.DataFrame:
     # All games played
     all_games_played = games_played()
 
-    # Prepare above_date variable for query purposes
-    above_date = above_date
+    # Select last game date from Game object
+    with Session.begin() as session:
+        stmt = (
+            select(
+                Game.date
+            )
+            .order_by(desc("date"))
+            .limit(1)
+        )
+    
+        # Prepare above_date variable for query purposes within
+        # pandas DataFrame
+        above_date = session.execute(stmt).scalars().first()
+        above_date = str(above_date)
 
     # Filter last games played only
     df_last_games = all_games_played.query("date > @above_date")
 
-    return df_last_games
+    return df_last_games 
 
 
 def scraping_data() -> list:

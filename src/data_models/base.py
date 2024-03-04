@@ -45,7 +45,6 @@ metadata_obj = MetaData(
     # schema="schema_name"
 )
 
-
 # Define base class allowing to define tables and relationships using class attributes.
 class Base(DeclarativeBase):
     # Set up metadata within the declarative base.

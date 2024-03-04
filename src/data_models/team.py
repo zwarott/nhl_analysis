@@ -47,7 +47,7 @@ class TeamStat(Base):
     a: Mapped[int] # Assists
     pts: Mapped[int] # Points
     pim: Mapped[int] # Penalties in Minutes
-    evg: Mapped[int] # Even Strenght Goals
+    evg: Mapped[int] # Even Strength Goals
     ppg: Mapped[int] # Power Play Goals
     shg: Mapped[int] # Short-Handed Goals
     sog: Mapped[int] # Shot on Goal

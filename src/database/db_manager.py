@@ -61,14 +61,14 @@ def populate_db_table(class_obj: Type[Base], df: pd.DataFrame) -> None:
 
 
 @timer
-def update_all_tables(last_game_date: str) -> None:
+def update_all_tables() -> None:
     """Update all database tables.
 
     Scrape all missing data and insert them into game,
     team and player tables (skater, goalie).
     """
     # Append last games stats
-    populate_db_table(Game, games_last(last_game_date))
+    populate_db_table(Game, games_last())
 
     # Append last basic team stats
     populate_db_table(TeamStat, basic_team_stats())
