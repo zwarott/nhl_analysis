@@ -711,9 +711,11 @@ def basic_goalie_stats(num_games: Union[int, None] = None) -> pd.DataFrame:
         atid_goalie_stats.reset_index(drop=True, inplace=True)
         htid_goalie_stats.reset_index(drop=True, inplace=True)
 
-        # Replace NaN values by GC values (goalie change)
-        atid_goalie_stats = atid_goalie_stats.where(pd.notnull(atid_goalie_stats), "GC")
-        htid_goalie_stats = htid_goalie_stats.where(pd.notnull(htid_goalie_stats), "GC")
+        # Replace NaN values by GC (goalie change) and 0 values within DEC and SV% columns
+        atid_goalie_stats["DEC"] = atid_goalie_stats["DEC"].where(pd.notnull(atid_goalie_stats["DEC"]), "GC")
+        atid_goalie_stats["SV%"] = atid_goalie_stats["SV%"].where(pd.notnull(atid_goalie_stats["SV%"]), 0)
+        htid_goalie_stats["DEC"] = htid_goalie_stats["DEC"].where(pd.notnull(htid_goalie_stats["DEC"]), "GC")
+        htid_goalie_stats["SV%"] = htid_goalie_stats["SV%"].where(pd.notnull(htid_goalie_stats["SV%"]), 0)
 
         # Player names in list for replacing them by pid values
         atid_goalies = atid_goalie_stats["Player"].tolist()

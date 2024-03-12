@@ -67,8 +67,8 @@ class TeamStatAdvanced(Base):
     gid: Mapped[intfk_gid]
 
     # Advaned team stats in specific game for all situations
-    satf: Mapped[int] # one-ice Shots Attempts (Corsi) For Events
-    sata: Mapped[int] # one-ice Shots Attempts (Corsi) Against Events
+    satf: Mapped[int] # on-ice Shots Attempts (Corsi) For Events
+    sata: Mapped[int] # on-ice Shots Attempts (Corsi) Against Events
     cfp: Mapped[float] # Corsi For Percentage (% of Corsi For Events vs. opponent while one ice)
     ozsp: Mapped[float] # Offensive Zone start %
     hit: Mapped[int] # Hits
