@@ -26,8 +26,10 @@ def games_played() -> pd.DataFrame:
     # Link from scraping game data
     link = "https://www.hockey-reference.com/leagues/NHL_2024_games.html"
     
-    # Create DataFrame with games results (first table -> 0)
-    df_all_games = pd.read_html(link)[0]
+    # Create DataFrame with games results
+    # 0 -> Regular Season results
+    # 1 Playoffs Results
+    df_all_games = pd.read_html(link)[1]
 
     # Rename column names
     old_cols = ["Date", "Visitor", "G", "Home", "G.1", "Unnamed: 5"]

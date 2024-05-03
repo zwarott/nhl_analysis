@@ -1,3 +1,4 @@
+import time
 from typing import Type
 
 import pandas as pd
@@ -84,3 +85,7 @@ def update_all_tables() -> None:
 
     # Append last basic goalie stats
     populate_db_table(GoalieStat, basic_goalie_stats())
+
+
+if __name__ == "__main__":
+    update_all_tables()

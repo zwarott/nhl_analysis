@@ -41,11 +41,11 @@ def players():
         link = "https://www.hockey-reference.com/teams/"
 
         # Scrape roster tab by specifying tab name
-        roster = pd.read_html(f"{link}{abbr}/", match="Scoring Regular Season")
+        roster = pd.read_html(f"{link}{abbr}/", match="Roster")
         
         # If there are multiple tables matching the name, select the desired one
         # Assuming the desired table is the first one
-        roster = roster[0].iloc[:-1].droplevel(0, axis=1)
+        roster = roster[0].iloc[:-1]
 
         # Useful column from scraped table
         scraped_cols = ["Player", "Pos"]
@@ -86,7 +86,7 @@ def players():
 def new_player(tid: int, player_name: str) -> None:
     """Add new player into db table.
 
-    If there are any new player in team, scrape data about him
+    If there is any new player in team, scrape data about him
     and import these data into player table.
 
     Parameters
@@ -106,12 +106,12 @@ def new_player(tid: int, player_name: str) -> None:
         .where(Team.tid == tid)
     ).first()
 
-    # Scrape roster tab by specifying tab name
-    roster = pd.read_html(f"{link}{team_abbr}/", match="Scoring Regular Season")
+    # Scrape roster tab by specifying tab nam
+    roster = pd.read_html(f"{link}{team_abbr}/", match="Roster")
     
     # If there are multiple tables matching the name, select the desired one
     # Assuming the desired table is the first one
-    roster = roster[0].iloc[:-1].droplevel(0, axis=1)
+    roster = roster[0].iloc[:-1]
 
     # Useful column from scraped table
     scraped_cols = ["Player", "Pos"]
