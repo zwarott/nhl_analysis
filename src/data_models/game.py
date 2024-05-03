@@ -5,7 +5,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, relationship
 
 from src.data_models.base import Base
-from src.data_models.base import intpk, intfk_tid, str_2, date  
+from src.data_models.base import intpk, intfk_tid, str_3, date  
 from src.data_models.base import timestamp_created, timestamp_updated
 from src.data_models.base import game_team_join, game_player_join
 
@@ -45,7 +45,7 @@ class Game(Base):
             return self.htid
 
     # How game ended: FT - fulltime | OT - overtime | SO - shootout
-    end: Mapped[str_2] 
+    end: Mapped[str_3] 
     
     # Many-to-Many relationships between Game and Team, Player class objects
     teams: Mapped[List[Team]] = relationship(secondary=game_team_join, back_populates="games")
