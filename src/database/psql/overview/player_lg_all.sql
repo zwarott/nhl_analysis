@@ -1,6 +1,7 @@
 WITH last_n_games AS (
     SELECT 
       pid, 
+      tid,
       gid, 
       sog,
       pts,
@@ -19,6 +20,7 @@ WITH last_n_games AS (
     FROM (
       SELECT 
         pid, 
+        tid,
         gid,
         sog,
         pts, 
@@ -30,13 +32,12 @@ WITH last_n_games AS (
         ROW_NUMBER() OVER (PARTITION BY pid ORDER BY gid DESC) AS rn
       FROM 
         skater_stat
-      WHERE 
-        tid = :team_id 
     ) sub
     WHERE 
       rn <= :last_n 
     GROUP BY 
       pid, 
+      tid,
       gid,
       sog, 
       pts, 
@@ -49,6 +50,7 @@ WITH last_n_games AS (
 overall_stats AS (
     SELECT 
       p.pid, 
+      p.tid,
       p.name, 
       ROUND(avg(ls.sog), 2) AS sog_avg,
       ls.mode_sog,
@@ -73,6 +75,7 @@ overall_stats AS (
       p.pid = ls.pid
     GROUP BY 
       p.pid, 
+      p.tid,
       p.name, 
       ls.mode_sog,
       ls.mode_pts, 
@@ -83,4 +86,4 @@ overall_stats AS (
       ls.mode_pm
 )
 SELECT * FROM overall_stats
-ORDER BY sog_avg DESC;
+ORDER BY :order_by DESC;
