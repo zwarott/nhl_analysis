@@ -7,4 +7,3 @@ load_dotenv()
 
 # Acces environment variables
 DATABASE_URL = os.getenv("DEVELOPMENT_DATABASE_URL")
-
