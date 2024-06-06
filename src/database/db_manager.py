@@ -1,10 +1,9 @@
-import time
 from typing import Type
 
 import pandas as pd
 from sqlalchemy import select
 
-from src.session_config import Session
+from src.session_config import Sess
 from src.database.decorators import timer
 
 from src.data_models.base import Base
@@ -14,7 +13,11 @@ from src.data_models.player import SkaterStat, SkaterStatAdvanced, GoalieStat
 
 from src.data_preprocessing.game_data import games_last
 from src.data_preprocessing.team_data import basic_team_stats, advanced_team_stats
-from src.data_preprocessing.player_data import basic_skater_stats, advanced_skater_stats, basic_goalie_stats
+from src.data_preprocessing.player_data import (
+    basic_skater_stats,
+    advanced_skater_stats,
+    basic_goalie_stats,
+)
 
 
 @timer
@@ -41,7 +44,7 @@ def populate_db_table(class_obj: Type[Base], df: pd.DataFrame) -> None:
 
     # Construct Session with begin() method for handling each transaction
     # The transaction is automatically committed or rolled back when exiting the 'with' block
-    with Session.begin() as session:
+    with Sess.begin() as session:
         print(f"Importing data into {class_obj.__name__} object.")
         # row is a dictionary containing key-value pairs where the keys correspond to column names
         for row in data:
@@ -55,10 +58,10 @@ def populate_db_table(class_obj: Type[Base], df: pd.DataFrame) -> None:
         total_count = len(session.scalars(select(class_obj)).all())
 
         print(
-            f"Imported records: {imported_count}", 
+            f"Imported records: {imported_count}",
             f"Total records in db table: {total_count}",
-            sep="\n"
-              )
+            sep="\n",
+        )
 
 
 @timer
@@ -80,7 +83,7 @@ def update_all_tables() -> None:
     # Append last basic skater stats
     populate_db_table(SkaterStat, basic_skater_stats())
 
-    # Append last advanced skater stats 
+    # Append last advanced skater stats
     populate_db_table(SkaterStatAdvanced, advanced_skater_stats())
 
     # Append last basic goalie stats
