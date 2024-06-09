@@ -5,11 +5,11 @@ The primary goal is to collect and analyze various NHL data to gain insights int
 
 ## Table of Contents
 
-- [Database Setup](#database_setup)
-- [Data Models](#data_models)
-- [Data Preprocessing and Import](#data_preprocessing_and_import)
-- [Data Analysis](#data_analysis)
-- [Machine Learning](#machine_learning)
+- [Database Setup](#database-setup)
+- [Data Models](#data-models)
+- [Data Preprocessing and Import](#data-preprocessing-and-import)
+- [Data Analysis](#data-analysis)
+- [Machine Learning](#machine-learning)
 
 ## Database Setup
 This project uses a [**PostgreSQL**](https://www.postgresql.org) database.   
